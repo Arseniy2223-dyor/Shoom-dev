@@ -1,0 +1,435 @@
+/* ==========================================================================
+   COMPONENTS — переиспользуемые элементы интерфейса
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Кнопки
+   -------------------------------------------------------------------------- */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--sp-16);
+  padding:var(--sp-12) var(--sp-24);
+  min-height:44px;                 /* минимальная зона нажатия */
+  border-radius:var(--r-8);
+  border:1px solid transparent;
+  font-size:var(--fs-base);
+  line-height:var(--lh-base);
+  text-align:center;
+  white-space:nowrap;          /* подпись кнопки не переносится на вторую строку */
+  cursor:pointer;
+  transition:background-color .2s ease,border-color .2s ease,color .2s ease;
+}
+.btn__icon{flex:none;width:20px;height:20px}
+
+.btn--accent{background:var(--color-accent);border-color:var(--color-accent);color:var(--color-primary-1)}
+.btn--accent:hover{background:var(--color-accent-hover);border-color:var(--color-accent-hover)}
+.btn--light{background:var(--color-primary-2);border-color:var(--color-primary-2);color:var(--color-primary-1)}
+.btn--outline{background:transparent;border-color:var(--color-primary-1);color:var(--color-primary-1)}
+.btn--outline-invert{background:transparent;border-color:var(--color-second-900);color:var(--color-primary-2)}
+.btn--ghost{background:var(--surface);border-color:var(--surface);color:var(--color-primary-1)}
+
+/* Компактный вариант — шапка и подвал */
+.btn--sm{padding:var(--sp-4) var(--sp-12);gap:var(--sp-4);border-radius:var(--r-4);min-height:36px}
+/* Средний — карточки товаров и кейсов */
+.btn--md{padding:var(--sp-8) var(--sp-12);gap:var(--sp-8);min-height:40px}
+/* Во всю ширину контейнера */
+.btn--block{display:flex;width:100%}
+
+/* --------------------------------------------------------------------------
+   Иконки
+   -------------------------------------------------------------------------- */
+.icon{flex:none;display:block;width:20px;height:20px}
+.icon--12{width:12px;height:12px}
+.icon--16{width:16px;height:16px}
+.icon--32{width:32px;height:32px}
+.icon--44{width:44px;height:44px}
+/* Иконки наследуют цвет текста — работают и на светлом, и на тёмном фоне */
+.icon [fill]:not([fill="none"]){fill:currentColor}
+.icon [stroke]:not([stroke="none"]){stroke:currentColor}
+
+.icon-link{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:var(--r-8);
+  color:var(--text);
+  transition:color .2s ease,background-color .2s ease;
+}
+
+/* Соцсети в кружке (FAQ, подвал) */
+.social-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:var(--sp-4);
+  background:var(--color-primary-2);
+  border-radius:var(--r-pill);
+  color:var(--color-primary-1);
+}
+
+/* --------------------------------------------------------------------------
+   Ссылки навигации
+   -------------------------------------------------------------------------- */
+.nav-link{
+  display:inline-flex;align-items:center;gap:var(--sp-4);
+  padding:var(--sp-4) var(--sp-12);
+  border-radius:var(--r-8);
+  transition:color .2s ease;
+}
+.nav-link--sm{font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:400}
+.nav-link[aria-current="page"]{font-weight:500}
+
+/* --------------------------------------------------------------------------
+   Карточка товара
+   -------------------------------------------------------------------------- */
+.product-card{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:var(--sp-16);
+  min-height:380px;
+  padding:var(--sp-16);
+  background:var(--color-primary-2);
+  border:1px solid var(--color-second-900);
+  border-radius:var(--r-12);
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+/* Наведение на карточку: обводка гаснет, вместо неё тень из макета */
+.product-card:hover{
+  border-color:transparent;
+  box-shadow:var(--shadow-card);
+}
+/* Наведение на сам текст подсвечивает его акцентом */
+.product-card__title a:hover{color:var(--color-accent-hover)}
+/* Фон не задаём: у товарных PNG прозрачная подложка, под ними должен быть
+   фон самой карточки, а не белый прямоугольник. */
+.product-card__media{
+  aspect-ratio:293/220;
+  border-radius:var(--r-8);
+  overflow:hidden;
+}
+.product-card__media img{
+  width:100%;height:100%;
+  object-fit:contain;
+  transition:scale .35s ease;
+}
+.product-card:hover .product-card__media img{scale:1.06}
+.product-card__body{display:flex;flex-direction:column;gap:var(--sp-12)}
+.product-card__title{
+  font-size:var(--fs-base);
+  line-height:var(--lh-base);
+  font-weight:400;
+  transition:font-weight .2s ease;
+  /* три строки максимум — карточки в ряду остаются одной высоты */
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.product-card:hover .product-card__title{font-weight:500}
+.product-card__title a{transition:color .2s ease}
+.product-card__footer{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-12)}
+.product-card__action{
+  position:relative;
+  flex:none;
+  width:120px;              /* кнопка и счётчик занимают одну и ту же ширину */
+}
+/* Состояние переключаем классом: атрибут hidden ненадёжен — его перебивает
+   display у .btn/.stepper. */
+.product-card__action .stepper{display:none}
+.product-card__action.is-active .stepper{display:flex}
+.product-card__action.is-active .product-card__add{display:none}
+
+/* Счётчик количества встаёт РОВНО на место кнопки: те же размеры, фон и
+   типографика, поэтому карточка при добавлении не «прыгает». */
+.stepper{
+  width:120px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:var(--sp-4);
+  width:120px;
+  padding-inline:var(--sp-8);
+}
+.stepper__btn{
+  display:flex;align-items:center;justify-content:center;
+  flex:none;
+  width:24px;height:24px;
+  border-radius:var(--r-4);
+  color:inherit;
+  transition:background-color .2s ease;
+}
+.stepper__btn:hover{background:rgba(12,12,12,.12)}
+.stepper__value{flex:1;text-align:center;font-size:var(--fs-base);line-height:var(--lh-base)}
+.product-card__price{display:flex;align-items:flex-end;gap:var(--sp-4);white-space:nowrap;min-width:0}
+.product-card__price-main{font-size:var(--fs-h4);line-height:var(--lh-h4);font-weight:500;white-space:nowrap}
+.product-card__price-unit{padding-bottom:var(--sp-4);font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-second-800)}
+
+/* --------------------------------------------------------------------------
+   Карточка-показатель (результаты шумоизоляции)
+   -------------------------------------------------------------------------- */
+.fact-card{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:var(--sp-24);
+  min-height:218px;
+  padding:var(--sp-24);
+  background:var(--surface);
+  border-radius:var(--r-8);
+}
+.fact-card__value{font-family:var(--font-display);font-size:var(--fs-d2);line-height:var(--lh-d2);font-weight:700}
+.fact-card__lead{font-size:var(--fs-base);line-height:var(--lh-base)}
+.fact-card__note{color:var(--text-muted)}
+
+/* --------------------------------------------------------------------------
+   Ячейка статистики (тёмная секция с декоративными границами)
+   -------------------------------------------------------------------------- */
+.stat-cell{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:var(--sp-4);
+  min-height:200px;
+  padding:var(--sp-44) var(--sp-20) var(--sp-20);
+  text-align:center;
+}
+.stat-cell__index{
+  position:absolute;top:var(--sp-20);left:var(--sp-20);
+  color:var(--text-muted-invert);
+  font-size:var(--fs-base);line-height:var(--lh-base);
+}
+.stat-cell__value{font-family:var(--font-display);font-size:var(--fs-d1);line-height:var(--lh-d1);font-weight:700}
+.stat-cell__label{max-width:400px;color:var(--text-muted-invert)}
+
+/* Декоративный «шов» между ячейками. Сама обводка — радиальный градиент
+   (утилита .gborder в base.css), здесь только скругления. */
+.stat-cell--br{border-top-left-radius:var(--r-12);border-bottom-right-radius:var(--r-12)}
+.stat-cell--ltb{border-top-left-radius:var(--r-12);border-bottom-left-radius:var(--r-12)}
+.stat-cell--tr{border-top-right-radius:var(--r-12)}
+
+/* --------------------------------------------------------------------------
+   Карточка отзыва
+   -------------------------------------------------------------------------- */
+.review-card{
+  display:flex;flex-direction:column;gap:var(--sp-16);
+  padding:var(--sp-20);
+  background:var(--surface-dark);
+  border-radius:var(--r-12);
+}
+.review-card__head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-16)}
+.review-card__author{display:flex;align-items:center;gap:var(--sp-8);min-width:0}
+.review-card__avatar{flex:none;width:44px;height:44px;border-radius:var(--r-pill);object-fit:cover}
+.review-card__body{display:flex;flex-direction:column;gap:var(--sp-4)}
+.review-card__text{
+  display:-webkit-box;-webkit-line-clamp:8;-webkit-box-orient:vertical;overflow:hidden;
+}
+.review-card__more{align-self:flex-start;color:var(--text-muted);transition:color .2s ease}
+
+.rating{display:flex;align-items:center;color:var(--color-accent)}
+.rating .icon{width:20px;height:20px}
+
+/* Плашки «152 отзыва» / «5.0 оценка» */
+.rating-tile{
+  display:inline-flex;align-items:flex-end;gap:var(--sp-8);
+  padding:var(--sp-12);
+  background:var(--surface-dark);
+  border-radius:var(--r-8);
+}
+.rating-tile__value{font-family:var(--font-display);font-size:var(--fs-d1);line-height:var(--lh-d1);font-weight:700}
+.rating-tile__meta{display:flex;flex-direction:column;align-items:center;gap:var(--sp-4);padding-bottom:var(--sp-8)}
+.rating-tile__meta .icon{color:var(--color-accent)}
+.rating-tile__caption{color:var(--text-muted-invert)}
+
+/* --------------------------------------------------------------------------
+   Карточка работы (кейса)
+   -------------------------------------------------------------------------- */
+.work-card{
+  display:flex;gap:var(--sp-24);
+  padding:var(--sp-20);
+}
+.work-card__media{flex:none;width:242px;height:300px;border-radius:var(--r-8);overflow:hidden}
+.work-card__media img{width:100%;height:100%;object-fit:cover}
+.work-card__body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;gap:var(--sp-24)}
+.work-card__head{display:flex;flex-direction:column;gap:var(--sp-16)}
+.work-card__zones{display:flex;flex-direction:column;gap:var(--sp-8)}
+.work-card__foot{display:flex;flex-direction:column;gap:var(--sp-12);align-items:flex-start}
+.work-card__specs{display:flex;flex-direction:column;gap:var(--sp-4)}
+.work-card__specs dt{display:inline;color:var(--text-muted-invert)}
+.work-card__specs dd{display:inline;margin:0}
+.work-card__specs div{font-size:var(--fs-sm);line-height:var(--lh-sm)}
+
+/* Сетка кейсов, замкнутая «крестом». Обводка — радиальный градиент (.gborder). */
+.work-card--br{border-bottom-right-radius:var(--r-12)}
+.work-card--bl{border-bottom-left-radius:var(--r-12)}
+.work-card--tr{border-top-right-radius:var(--r-12)}
+.work-card--tl{border-top-left-radius:var(--r-12)}
+
+/* --------------------------------------------------------------------------
+   Промо-карточка с фото (кейс в блоке магазина, блок «250+»)
+   -------------------------------------------------------------------------- */
+.promo-card{
+  position:relative;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:var(--sp-24);
+  min-height:380px;
+  border-radius:var(--r-12);
+  overflow:hidden;
+  color:var(--text-invert);
+  isolation:isolate;
+}
+.promo-card__bg{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.promo-card::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:rgba(0,0,0,.4);
+}
+.promo-card__body{display:flex;flex-direction:column;gap:var(--sp-16);align-items:flex-start;max-width:624px}
+.promo-card__foot{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-16)}
+
+/* Точки и стрелки слайдера (статичная разметка) */
+.dots{display:flex;align-items:center;gap:var(--sp-4)}
+.dots__item{width:12px;height:12px;border:1px solid var(--color-primary-2);border-radius:var(--r-pill)}
+.dots__item[aria-current="true"]{background:var(--color-accent);border-color:var(--color-accent)}
+
+.slider-nav{display:flex;align-items:center;gap:var(--sp-12)}
+.slider-nav__btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:44px;
+  background:var(--color-primary-2);color:var(--color-primary-1);
+  border-radius:var(--r-pill);
+  transition:opacity .2s ease;
+}
+.slider-nav__btn--prev .icon{transform:rotate(180deg)}
+
+/* --------------------------------------------------------------------------
+   Аккордеон вопросов
+   -------------------------------------------------------------------------- */
+.accordion{display:flex;flex-direction:column}
+.accordion__item{border-bottom:1px solid var(--border)}
+.accordion__item summary{list-style:none;cursor:pointer}
+.accordion__item summary::-webkit-details-marker{display:none}
+
+.accordion__row{
+  display:flex;gap:var(--sp-44);
+  padding-block:var(--sp-16);
+}
+.accordion__index{flex:none;width:20px;padding-top:var(--sp-12);text-align:center;color:var(--text)}
+.accordion__main{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-4)}
+.accordion__head{display:flex;align-items:center;gap:var(--sp-12)}
+.accordion__question{flex:1;font-size:var(--fs-h4);line-height:var(--lh-h4);font-weight:500}
+.accordion__toggle{flex:none;width:44px;height:44px;color:var(--text)}
+.icon-plus__bar{transition:opacity .2s ease}
+.accordion__answer{max-width:520px;color:var(--text)}
+
+/* Открытый пункт: вопрос гаснет, ответ раскрыт, «плюс» превращается в «минус» */
+.accordion__item[open] .accordion__question{color:var(--text-muted)}
+.accordion__item[open] .accordion__toggle .icon-plus__bar{opacity:0}
+
+/* --------------------------------------------------------------------------
+   Формы
+   -------------------------------------------------------------------------- */
+.field{display:flex;flex-direction:column;gap:var(--sp-8)}
+.input{
+  width:100%;
+  min-height:44px;
+  padding:var(--sp-12);
+  background:var(--surface);
+  border:1px solid transparent;
+  border-radius:var(--r-8);
+  color:var(--text);
+  transition:border-color .2s ease;
+}
+.input::placeholder{color:var(--text-muted)}
+.input:hover{border-color:var(--color-second-800)}
+
+.select{
+  display:flex;align-items:center;gap:var(--sp-8);
+  width:100%;min-height:44px;
+  padding:var(--sp-12);
+  background:var(--surface);
+  border:1px solid transparent;
+  border-radius:var(--r-8);
+  color:var(--text-muted);
+  text-align:left;
+}
+.select__value{flex:1;min-width:0}
+
+/* Чекбокс: нативный input + отрисованный квадрат */
+.checkbox{display:flex;align-items:flex-start;gap:var(--sp-8);cursor:pointer}
+.checkbox__input{
+  flex:none;appearance:none;
+  width:20px;height:20px;margin:0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-4);
+  cursor:pointer;
+  transition:background-color .2s ease,border-color .2s ease;
+}
+.checkbox__input:checked{
+  background:var(--color-accent);
+  border-color:var(--color-accent);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 10.5L8.5 14L15 6.5' stroke='%230C0C0C' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size:contain;
+}
+.checkbox__label{flex:1;font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:300;color:var(--text-muted)}
+
+/* --------------------------------------------------------------------------
+   Бегущая строка (статичная разметка — анимация подключается позже)
+   -------------------------------------------------------------------------- */
+.marquee{
+  display:flex;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.marquee__track{display:flex;flex:none;gap:0}
+.marquee__text{
+  font-size:var(--fs-sm);
+  line-height:var(--lh-sm);
+  text-transform:uppercase;
+  color:var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Раскрывающийся список с поиском (марка / модель авто)
+   -------------------------------------------------------------------------- */
+.combo{position:relative}
+.combo .select{width:100%;cursor:pointer}
+.combo .select[disabled]{opacity:.5;cursor:not-allowed}
+.combo .select[aria-expanded="true"]{border-color:var(--color-primary-1)}
+.combo .select[aria-expanded="true"] .icon{transform:rotate(180deg)}
+.combo .select .icon{transition:transform .2s ease}
+.combo__value--filled{color:var(--text)}
+
+/* Обязательно раньше .combo__panel: иначе display:flex перебьёт атрибут hidden */
+.combo__panel[hidden]{display:none}
+.combo__panel{
+  position:absolute;z-index:var(--z-sticky);
+  top:calc(100% + 4px);left:0;right:0;
+  display:flex;flex-direction:column;
+  padding:var(--sp-8);
+  background:var(--color-primary-2);
+  border:1px solid var(--border);
+  border-radius:var(--r-8);
+  box-shadow:0 12px 32px rgba(12,12,12,.12);
+}
+.combo__search{
+  width:100%;min-height:40px;
+  padding:var(--sp-8) var(--sp-12);
+  margin-bottom:var(--sp-8);
+  background:var(--surface);
+  border:1px solid transparent;
+  border-radius:var(--r-8);
+}
+.combo__search::placeholder{color:var(--text-muted)}
+.combo__list{
+  display:flex;flex-direction:column;
+  max-height:220px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+.combo__option{
+  width:100%;
+  padding:var(--sp-8) var(--sp-12);
+  min-height:40px;
+  border-radius:var(--r-8);
+  text-align:left;
+  transition:background-color .15s ease;
+}
+.combo__option:hover,.combo__option[aria-selected="true"]{background:var(--surface)}
+.combo__empty{padding:var(--sp-8) var(--sp-12);color:var(--text-muted);font-size:var(--fs-sm)}

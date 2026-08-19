@@ -1,0 +1,619 @@
+/* ==========================================================================
+   SECTIONS — шапка, секции страницы, подвал
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Шапка
+   -------------------------------------------------------------------------- */
+.site-header{
+  position:sticky;top:0;z-index:var(--z-header);
+  padding-block:var(--sp-12) var(--sp-8);
+  background:var(--bg);
+}
+/* Ряды шапки ближе на 8px */
+.site-header__inner{display:flex;flex-direction:column;gap:0}
+
+/* Верхняя строка: сервисные ссылки, соцсети, режим работы, телефон */
+/* Собственных зазоров нет: боковые padding по 12 у каждого пункта дают 24 между ними */
+.topbar{display:flex;align-items:center;gap:0}
+.topbar__nav{flex:1;display:flex;align-items:center;gap:0}
+.topbar__aside{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:0}
+.topbar__socials{display:flex;align-items:center;gap:var(--sp-8);padding-inline:var(--sp-12)}
+/* В сервисной строке иконки компактнее, но зона нажатия остаётся 28px (минимум по WCAG — 24px) */
+.topbar__socials .icon-link{width:32px;height:32px}
+.topbar__socials .icon{width:24px;height:24px}
+.topbar__phone{font-size:var(--fs-base);line-height:var(--lh-base);font-weight:500}
+
+/* Нижняя строка: логотип, основное меню, действия */
+.mainbar{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-20)}
+.mainbar__start{flex:1;display:flex;align-items:center;gap:var(--sp-44)}
+.mainbar__end{flex:1;max-width:400px;display:flex;align-items:center;justify-content:flex-end;gap:var(--sp-20)}
+.mainbar__nav{flex:1;display:flex;align-items:center;gap:0}
+.mainbar__tools{display:flex;align-items:center;gap:var(--sp-12)}
+/* Поиск и корзина крупнее остальных иконок шапки */
+.mainbar__tools .icon{width:32px;height:32px}
+.mainbar__tools .icon-link{width:44px;height:44px}
+.mainbar__actions{display:flex;align-items:center;gap:var(--sp-12)}
+
+.logo{display:inline-flex;align-items:center;flex:none;padding:8px}
+.logo img{height:48px;width:auto}
+.logo__mark{display:none}   /* компактный знак — только на мобильном */
+
+/* Мини-корзина */
+.cart{display:flex;align-items:center;gap:var(--sp-8);color:var(--text)}
+.cart__meta{display:flex;flex-direction:column;font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:300;white-space:nowrap}
+.cart__count{color:var(--text-muted)}
+
+/* --------------------------------------------------------------------------
+   Герой
+   -------------------------------------------------------------------------- */
+.hero{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  min-height:800px;
+  padding-block:var(--sp-60);
+  color:var(--text-invert);
+  isolation:isolate;
+  overflow:hidden;
+}
+.hero__media{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:rgba(0,0,0,.6)}
+.hero__inner{
+  display:flex;flex-direction:column;align-items:center;gap:var(--gap-title);
+  max-width:1222px;text-align:center;
+}
+/* На десктопе карточка прозрачная — видно фоновое видео */
+.hero__card{display:flex;flex-direction:column;align-items:center;gap:var(--gap-block)}
+.hero__poster{display:none}
+.hero__card > .hero__poster{border-radius:var(--r-8)}
+.hero__lead{max-width:800px;color:var(--text-muted-invert)}
+
+/* --------------------------------------------------------------------------
+   Результаты шумоизоляции
+   -------------------------------------------------------------------------- */
+.results__cards{margin-bottom:var(--grid-gap)}
+.results__videos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--grid-gap)}
+.results__video{
+  position:relative;
+  aspect-ratio:668/376;
+  border-radius:var(--r-12);
+  overflow:hidden;
+  background:var(--surface);
+}
+.results__video img{width:100%;height:100%;object-fit:cover}
+
+/* Плеер: сначала показываем обложку, iframe грузится только по клику,
+   иначе два ролика тянут ~1.5 МБ скриптов при каждой загрузке страницы. */
+.player{position:relative;width:100%;height:100%}
+.player__poster{
+  position:absolute;inset:0;
+  display:block;width:100%;height:100%;
+  padding:0;border:0;cursor:pointer;
+}
+.player__poster img{width:100%;height:100%;object-fit:cover}
+.player__poster::after{
+  content:"";position:absolute;inset:0;
+  background:rgba(12,12,12,.25);
+  transition:background-color .2s ease;
+}
+.player__poster:hover::after{background:rgba(12,12,12,.1)}
+.player__btn{
+  position:absolute;top:50%;left:50%;translate:-50% -50%;
+  display:flex;align-items:center;justify-content:center;
+  width:72px;height:72px;
+  background:var(--color-accent);
+  border-radius:var(--r-pill);
+  color:var(--color-primary-1);
+  transition:scale .2s ease;
+}
+.player__poster:hover .player__btn{scale:1.06}
+.player__btn svg{width:28px;height:28px;margin-left:3px}
+.player__frame{position:absolute;inset:0;width:100%;height:100%}
+.player__link{
+  position:absolute;right:var(--sp-16);bottom:var(--sp-16);
+  display:inline-flex;align-items:center;gap:var(--sp-8);
+  min-height:36px;
+  padding:var(--sp-8) var(--sp-12);
+  background:rgba(12,12,12,.7);
+  border-radius:var(--r-8);
+  color:var(--color-primary-2);
+  font-size:var(--fs-sm);line-height:var(--lh-sm);
+  transition:background-color .2s ease;
+}
+.player__link:hover{background:rgba(12,12,12,.9)}
+
+/* --------------------------------------------------------------------------
+   Калькулятор
+   Раскладка в духе конфигуратора Rivian: фото машины залипает на всю высоту
+   экрана слева, правая колонка со всеми настройками прокручивается.
+   -------------------------------------------------------------------------- */
+.calculator{position:relative;background:var(--bg)}
+.calculator__grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 555px;
+  gap:52px;              /* зазор между фото и панелью */
+  align-items:start;
+  /* правая колонка выходит на ту же линию, что и общий контейнер */
+  /* Слева фото уходит в край экрана, справа колонка держит линию контейнера.
+     100% (а не 100vw) — иначе полоса прокрутки сдвигает колонку. */
+  padding-right:max(var(--sp-20),calc((100% - var(--container)) / 2 + var(--sp-20)));
+}
+
+/* --- Визуал ---
+   Фото цельное, без подложек и скруглений: собственный фон снимка и есть фон
+   блока. Колонка растягивается на широких экранах, отступ до панели постоянный. */
+.calculator__visual{
+  position:sticky;
+  top:0;
+  height:100dvh;
+}
+.carview-dots{display:none}   /* точки — только на мобильном */
+.calculator__thumbs{
+  position:absolute;
+  left:50%;bottom:var(--sp-24);
+  translate:-50% 0;
+  z-index:1;
+  display:inline-flex;align-items:center;gap:var(--sp-8);
+  padding:var(--sp-8) var(--sp-12);
+  background:var(--color-primary-2);
+  border-radius:var(--r-12);
+  box-shadow:0 8px 24px rgba(12,12,12,.10);
+}
+.calculator__thumb{
+  padding:var(--sp-4);
+  border:1px solid var(--color-second-800);
+  border-radius:var(--r-8);
+  transition:border-color .2s ease;
+}
+.calculator__thumb[aria-current="true"]{border-color:var(--color-second-100)}
+.calculator__thumb img{width:80px;height:60px;object-fit:cover;border-radius:var(--r-8)}
+
+/* --- Подсветка зон кузова ---
+   Контуры заданы в процентах, поэтому попадают в кузов на любой ширине. */
+/* Обёртка занимает свободную высоту, внутри неё блок держит пропорцию снимка */
+/* Снимок занимает всю высоту экрана; миниатюры лежат поверх и высоту не отъедают */
+.carview-stage{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;   /* ракурсы лежат в одной ячейке, друг поверх друга */
+  overflow:hidden;      /* снимок шире колонки — лишний фон срезается по бокам */
+}
+.carview{
+  position:relative;
+  /* Пропорция блока должна совпадать с пропорцией снимка: проценты в контуре
+     считаются от блока, и любое расхождение уводит подсветку с кузова. */
+  /* Пропорция блока = пропорция снимка: проценты и clipPath считаются от него.
+     height + min-width дают заполнение колонки по обеим осям (как object-fit:cover),
+     лишнее срезает .carview-stage. */
+  grid-area:1 / 1;
+  /* Пропорция берётся из --ar-w/--ar-h: у ракурсов разные кадры.
+     Нарушать её нельзя — от блока считается clipPath зоны. */
+  aspect-ratio:var(--ar-w) / var(--ar-h);
+  /* Заполнение колонки по обеим осям: наибольшее из ширины колонки и ширины,
+     нужной чтобы закрыть высоту экрана. Лишнее срезает .carview-stage. */
+  width:max(100%, calc(100dvh * var(--ar-w) / var(--ar-h)));
+  height:auto;
+  /* Смена ракурса: новый кадр проявляется снизу вверх */
+  opacity:0;
+  translate:0 32px;
+  visibility:hidden;
+  transition:opacity .45s ease, translate .45s ease, visibility 0s linear .45s;
+  isolation:isolate;          /* наложение не выходит за пределы блока */
+}
+.carview__base,
+.carview__zone img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:contain;
+}
+.carview__zone{
+  position:absolute;inset:0;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .28s ease;
+  isolation:isolate;
+}
+.carview__zone.is-on{opacity:1}
+
+.carview.is-active{
+  opacity:1;
+  translate:0 0;
+  visibility:visible;
+  transition:opacity .45s ease, translate .45s ease, visibility 0s;
+}
+/* color сохраняет светимость исходника — видны блики, тени и рёбра кузова */
+.carview__tint{position:absolute;inset:0;background:var(--color-accent);mix-blend-mode:color}
+.carview__boost{position:absolute;inset:0;background:var(--color-accent);mix-blend-mode:overlay;opacity:.55}
+
+/* Контуры зон — векторные, из SVG заказчика. Кривые сохранены как есть. */
+.carview__zone[data-zone="doors"]{clip-path:url(#zone-doors)}
+.carview__zone[data-zone="hood"]{clip-path:url(#zone-hood)}
+.carview__zone[data-zone="trunk"]{clip-path:url(#zone-trunk)}
+
+@media (prefers-reduced-motion:reduce){
+  .carview__zone,
+  .carview{transition:none}
+  .carview{translate:none}
+}
+
+/* --- Панель настроек --- */
+/* Панель начинается и заканчивается ровно на кромках фото: фото залипло
+   на 100dvh, поэтому собственные вертикальные отступы панели убраны. */
+.calculator__panel{
+  display:flex;flex-direction:column;gap:var(--sp-32);
+  padding-block:0;
+}
+.calculator__group{display:flex;flex-direction:column;gap:var(--sp-16)}
+.calculator__selects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-12)}
+
+/* Тарифы */
+.tariffs{display:flex;flex-direction:column;gap:var(--sp-12)}
+.tariff{
+  display:flex;flex-direction:column;justify-content:space-between;gap:var(--sp-16);
+  min-height:121px;
+  padding:var(--sp-16);
+  border:1px solid var(--border);
+  border-radius:var(--r-12);
+  text-align:left;
+  transition:border-color .2s ease;
+}
+.tariff:hover{border-color:var(--color-second-800)}
+.tariff[aria-pressed="true"]{border:2px solid var(--color-primary-1);padding:15px}
+.tariff__head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-16)}
+.tariff__name{font-size:var(--fs-h4);line-height:var(--lh-h4);font-weight:500}
+.tariff__price{flex:none;text-align:right}
+.tariff__desc{color:var(--text-muted);font-size:var(--fs-sm);line-height:var(--lh-sm)}
+
+/* Зоны — две в ряд, как в макете */
+.zones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-12)}
+.zone{
+  position:relative;
+  display:flex;align-items:center;gap:var(--sp-12);
+  height:100%;
+  padding:var(--sp-8);
+  padding-right:var(--sp-32);
+  border:1px solid var(--border);
+  border-radius:var(--r-8);
+  cursor:pointer;
+  transition:border-color .2s ease;
+}
+.zone:hover{border-color:var(--color-second-800)}
+.zone__media{
+  flex:none;display:flex;align-items:center;justify-content:center;
+  width:80px;height:80px;padding:var(--sp-8);
+  background:var(--surface);border-radius:var(--r-8);
+}
+.zone__media img{width:64px;height:64px;object-fit:contain}
+.zone__body{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-4)}
+.zone__price{color:var(--text-muted);font-size:var(--fs-sm);line-height:var(--lh-sm)}
+.zone__check{position:absolute;top:var(--sp-8);right:var(--sp-8)}
+.zone:has(.zone__check:checked){border-color:var(--color-primary-1)}
+
+/* Итог */
+.summary{display:flex;flex-direction:column;gap:var(--sp-24)}
+.summary__groups{display:flex;flex-direction:column;gap:var(--sp-16)}
+
+/* Группа сворачивается; в шапке — название и сумма по группе */
+.summary__group{border-bottom:1px solid var(--border)}
+.summary__group[hidden]{display:none}
+.summary__head{
+  display:flex;align-items:center;gap:var(--sp-12);
+  padding-block:var(--sp-12);
+  list-style:none;
+  cursor:pointer;
+}
+.summary__head::-webkit-details-marker{display:none}
+.summary__title{flex:none;font-size:var(--fs-base);line-height:var(--lh-base);font-weight:500}
+.summary__group-total{flex:none;font-weight:500}
+/* Вращаем обёртку, а не сам <svg>: на SVG-элементе свойство rotate
+   пересчитывается не во всех движках. */
+.summary__chevron{
+  flex:none;
+  display:inline-flex;
+  margin-right:auto;             /* стрелка у названия, цена уходит вправо */
+  transform:rotate(0deg);        /* свёрнутая группа — стрелка вниз */
+  transition:transform .2s ease;
+}
+.summary__group[open] .summary__chevron{transform:rotate(180deg)}
+
+.summary__list{display:flex;flex-direction:column;gap:var(--sp-8);padding-bottom:var(--sp-12)}
+.summary__row{display:flex;align-items:flex-start;gap:var(--sp-24);font-size:var(--fs-sm);line-height:var(--lh-sm)}
+.summary__name{flex:1;min-width:0;color:var(--text-muted)}
+.summary__values{flex:none;display:flex;align-items:center;justify-content:flex-end;gap:var(--sp-32)}
+.summary__qty,.summary__cost{width:80px;text-align:right}
+.summary__total{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-24);padding-top:var(--sp-16)}
+.summary__order{align-self:stretch;margin-top:var(--sp-32)}   /* 32px под ценой */
+
+/* Ничего не выбрано — итог не показываем, остаётся только кнопка */
+.summary.is-empty > .display-2,
+.summary.is-empty .summary__groups,
+.summary.is-empty .summary__total{display:none}
+.summary.is-empty .summary__order{margin-top:0}
+
+/* --------------------------------------------------------------------------
+   Магазин и популярное
+   -------------------------------------------------------------------------- */
+.shop__row{display:grid;grid-template-columns:var(--col) var(--col) minmax(0,1fr);gap:var(--grid-gap)}
+.shop__promo{min-height:380px}
+.popular__cta{margin-top:var(--gap-block)}
+
+/* --------------------------------------------------------------------------
+   О компании — фон из фотографий
+   -------------------------------------------------------------------------- */
+.about{
+  position:relative;
+  display:flex;align-items:center;
+  min-height:100dvh;              /* лента фото занимает весь экран */
+  background:var(--bg-dark);
+  color:var(--text-invert);
+  overflow:hidden;
+}
+
+/* --- Фон: два встречных ряда, бесконечная прокрутка --- */
+.about__backdrop{
+  position:absolute;inset:0;z-index:0;
+  display:grid;
+  grid-template-rows:repeat(2,1fr);
+  gap:var(--sp-12);
+}
+.about__row{display:flex;overflow:hidden;min-height:0}
+.about__track{
+  display:flex;
+  gap:var(--sp-12);
+  flex:none;
+  will-change:transform;
+  animation:about-marquee 120s linear infinite;   /* очень медленно */
+}
+.about__row--rtl .about__track{animation-direction:reverse}
+.about__track img{
+  flex:none;
+  width:clamp(280px,26vw,460px);
+  height:100%;
+  object-fit:cover;
+  border-radius:var(--r-12);
+}
+/* Набор продублирован, поэтому сдвиг ровно на половину даёт бесшовный цикл */
+@keyframes about-marquee{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-50%,0,0)}
+}
+
+/* Затемнение: фото читаются, но текст остаётся контрастным */
+.about__backdrop::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,
+              #0C0C0C 0%,
+              rgba(12,12,12,.72) 30%,
+              rgba(12,12,12,.72) 70%,
+              #0C0C0C 100%);
+}
+.about__inner{position:relative;z-index:1;width:100%;padding-block:var(--gap-section)}
+/* Локальный скрим под текстом — по краям фото остаются открытыми */
+.about__inner::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(58% 52% at 50% 50%,
+              rgba(12,12,12,.85) 0%,
+              rgba(12,12,12,0) 100%);
+}
+.about__content{display:flex;flex-direction:column;align-items:center;gap:var(--gap-block);text-align:center}
+.about__head{display:flex;flex-direction:column;align-items:center;gap:var(--gap-title)}
+.about__lead{max-width:800px;color:var(--text-muted-invert)}
+
+/* --------------------------------------------------------------------------
+   Переход между секциями: верхняя закрепляется, нижняя наезжает поверх
+   .stack ограничивает область залипания — секция открепляется на границе
+   пары, а не тянется до конца страницы.
+   -------------------------------------------------------------------------- */
+.stack{position:relative}
+.pin{
+  position:sticky;
+  top:0;
+  z-index:0;
+}
+.over{
+  position:relative;
+  z-index:1;
+  /* фон обязателен: иначе сквозь наезжающую секцию видно закреплённую */
+  background:var(--bg);
+  overflow:hidden;
+}
+.over.section--dark,
+.about.over{background:var(--bg-dark)}
+
+@media (prefers-reduced-motion:reduce){
+  .about__track{animation:none}
+}
+
+/* --------------------------------------------------------------------------
+   Показатели / отзывы / работы (тёмный блок)
+   -------------------------------------------------------------------------- */
+.stats__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--grid-gap)}
+
+.reviews__tiles{display:flex;align-items:center;gap:var(--sp-12);margin-bottom:var(--gap-block)}
+.reviews__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--grid-gap);align-items:start}
+.reviews__cta,.works__cta{margin-top:var(--gap-block)}
+
+.works__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--grid-gap)}
+
+/* --------------------------------------------------------------------------
+   Вопросы и ответы
+   -------------------------------------------------------------------------- */
+.faq__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--grid-gap)}
+.faq__aside{display:flex;flex-direction:column;justify-content:space-between;gap:var(--sp-44);min-height:465px}
+.faq__head{display:flex;flex-direction:column;gap:var(--sp-12)}
+.faq__lead{max-width:440px}
+.faq__contacts{display:flex;flex-direction:column;gap:var(--sp-16);width:292px}
+.faq__messengers{display:flex;align-items:center;gap:var(--sp-12)}
+.faq__messenger{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-8);
+  width:140px;min-height:44px;
+  padding:var(--sp-4) var(--sp-12);
+  background:var(--surface);border-radius:var(--r-8);
+}
+.faq__phone{font-size:var(--fs-h4);line-height:var(--lh-h4);font-weight:500}
+
+/* --------------------------------------------------------------------------
+   Карта
+   -------------------------------------------------------------------------- */
+.map{padding-bottom:0}
+.map__frame{border-radius:var(--r-12);overflow:hidden;aspect-ratio:1360/457}
+.map__frame img{width:100%;height:100%;object-fit:cover}
+
+/* --------------------------------------------------------------------------
+   Контакты: форма + промо
+   -------------------------------------------------------------------------- */
+.contact__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--grid-gap)}
+
+/* Блок формы обрамлён бегущим текстом с четырёх сторон.
+   --shift (0…1) выставляет скрипт по мере прокрутки; знак сдвига у каждой
+   стороны свой, поэтому текст читается как одна лента, идущая по периметру. */
+.contact__form-wrap{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  min-height:670px;
+  --shift:0;
+}
+.contact__marquee{overflow:hidden;line-height:1}
+.contact__marquee--top{grid-column:1/-1;grid-row:1}
+.contact__marquee--bottom{grid-column:1/-1;grid-row:3}
+.contact__marquee--left{grid-column:1;grid-row:2}
+.contact__marquee--right{grid-column:3;grid-row:2}
+
+.contact__marquee .marquee__track{
+  display:flex;
+  width:max-content;
+  will-change:translate;
+}
+/* Горизонтальные стороны */
+.contact__marquee--top .marquee__track{translate:calc(-25% * var(--shift)) 0}
+.contact__marquee--bottom .marquee__track{translate:calc(-25% * (1 - var(--shift))) 0}
+/* Вертикальные: текст разворачиваем и двигаем по высоте.
+   Трек кладём абсолютом — в гриде он иначе зажимается высотой ячейки
+   и тексту некуда ехать. */
+.contact__marquee--left,
+.contact__marquee--right{
+  position:relative;
+  width:var(--lh-sm);            /* трек лежит абсолютом — ширину задаём явно */
+}
+.contact__marquee--left .marquee__track,
+.contact__marquee--right .marquee__track{
+  position:absolute;
+  top:0;left:0;
+  writing-mode:vertical-rl;      /* строка идёт сверху вниз */
+  flex-direction:row;            /* в вертикальном письме это стопка друг за другом */
+  width:auto;
+  height:max-content;
+}
+.contact__marquee--right .marquee__track{translate:0 calc(-25% * var(--shift))}
+.contact__marquee--left .marquee__track{
+  rotate:180deg;
+  translate:0 calc(-25% * (1 - var(--shift)));
+}
+
+@media (prefers-reduced-motion:reduce){
+  .contact__form-wrap{--shift:0}
+  .contact__marquee .marquee__track{translate:none}
+}
+
+.contact__form{
+  grid-column:2;grid-row:2;
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:var(--gap-block);
+  padding:var(--sp-44) var(--sp-20);
+  text-align:center;
+}
+/* Декоративный знак позади формы (прозрачность вшита в сам SVG) */
+.contact__form-mark{
+  position:absolute;z-index:0;
+  top:50%;left:50%;translate:-50% -50%;
+  width:274px;height:274px;
+  pointer-events:none;
+}
+.contact__form-head{display:flex;flex-direction:column;align-items:center;gap:var(--gap-title)}
+.contact__form-lead{max-width:440px}
+.contact__form-body{display:flex;flex-direction:column;gap:var(--sp-16);width:100%;max-width:440px}
+.contact__form-row{display:flex;align-items:center;gap:var(--sp-12)}
+.contact__form-row .input{flex:1}
+
+.contact__promo{position:relative;min-height:670px;justify-content:flex-end}
+/* Фоновое видео ВК: масштабируем с перекрытием, чтобы не было полей,
+   и отключаем перехват кликов — это декорация, а не плеер. */
+.contact__promo-video{
+  position:absolute;top:50%;left:50%;z-index:-2;
+  width:177.78vh;height:56.25vw;
+  min-width:100%;min-height:100%;
+  translate:-50% -50%;
+  border:0;pointer-events:none;
+}
+.contact__promo .promo-card__bg{z-index:-3}
+.contact__promo::after{background:rgba(0,0,0,.62)}
+.contact__promo .promo-card__body{gap:var(--sp-32)}
+.contact__promo-figures{display:flex;flex-direction:column;gap:var(--sp-4)}
+
+/* --------------------------------------------------------------------------
+   Подвал
+   -------------------------------------------------------------------------- */
+.site-footer{background:var(--bg-dark);color:var(--text-invert);padding-bottom:var(--sp-20)}
+/* Чёрный блок скруглён по всем углам и лежит поверх жёлтой полосы:
+   нижние скругления «наезжают» на неё. */
+.site-footer__main{
+  position:relative;
+  z-index:1;
+  display:flex;gap:var(--sp-60);
+  padding-block:var(--sp-44);
+  background:var(--bg-dark);
+  border-radius:var(--r-20);
+}
+.site-footer__brand{
+  flex:1;max-width:240px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:var(--sp-32);
+}
+.site-footer__brand-top{display:flex;flex-direction:column;gap:var(--sp-20)}
+.site-footer__logo img{height:22px;width:auto}
+.site-footer__cols{flex:1;display:flex;justify-content:space-between;gap:var(--sp-32)}
+.site-footer__col{display:flex;flex-direction:column;gap:var(--sp-16)}
+.site-footer__col--nav{max-width:163px}
+.site-footer__col--shop{max-width:264px}
+.site-footer__col--contacts{max-width:254px;justify-content:space-between;gap:var(--sp-44)}
+.site-footer__col-title{font-weight:500}
+.site-footer__links{display:flex;flex-direction:column;gap:var(--sp-12);color:var(--text-muted-invert)}
+.site-footer__contacts{display:flex;flex-direction:column;gap:var(--sp-12)}
+.site-footer__phone{font-size:var(--fs-h4);line-height:var(--lh-h4);font-weight:500}
+.site-footer__socials{display:flex;flex-direction:column}
+.site-footer__socials--grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-8)}
+.site-footer__social{
+  display:flex;align-items:center;justify-content:center;gap:var(--sp-4);
+  min-height:36px;
+  padding:var(--sp-4) var(--sp-12);
+  border:1px solid var(--color-second-900);
+  border-radius:var(--r-8);
+}
+
+/* Нижняя жёлтая плашка */
+.site-footer__legal{
+  display:flex;align-items:center;justify-content:space-between;gap:var(--sp-32);
+  /* Верх плашки уходит под чёрный блок на 20px, поэтому к нужному отступу
+     до текста (20px) прибавляем перекрытие. */
+  padding:calc(20px + var(--r-20)) var(--gutter) var(--sp-24);
+  margin-top:calc(-1 * var(--r-20));
+  background:var(--color-accent);
+  color:var(--color-primary-1);
+  border-radius:0 0 var(--r-20) var(--r-20);   /* сверху скруглений нет */
+}
+.site-footer__legal-links{display:flex;align-items:center;gap:var(--sp-32);flex:1}
+.site-footer__credits{width:268px}
+
+/* Обёртка подвала: тёмный блок со скруглениями, жёлтая плашка внутри него.
+   overflow:hidden обрезает плашку по радиусу — отсюда чёрные углы по бокам. */
+.site-footer__shell{
+  max-width:var(--container-wide);
+  margin-inline:auto;
+  width:100%;
+}
+
+/* Ховер акцентных элементов */
+.calculator__thumb:hover{border-color:var(--color-accent-hover)}

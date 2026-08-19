@@ -1,0 +1,276 @@
+/* ==========================================================================
+   BASE — токены, сброс, типографика, сетка
+   ========================================================================== */
+
+/* --- Onest: основной шрифт (Google Fonts, поддержка кириллицы) ----------- */
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;700&display=swap');
+
+/* --- Wadik: акцидентный шрифт заголовков --------------------------------
+   Файл шрифта не входит в поставку макета. Положите Wadik.woff2 / Wadik.woff
+   в папку /fonts — правило подхватится автоматически. До этого заголовки
+   рендерятся запасным Onest 700 (см. --font-display).                      */
+@font-face{
+  font-family:'Wadik';
+  src:url('../fonts/Wadik.woff2') format('woff2'),
+      url('../fonts/Wadik.woff')  format('woff');
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
+/* ==========================================================================
+   ТОКЕНЫ
+   ========================================================================== */
+:root{
+  /* --- Палитра (из макета) --- */
+  --color-primary-1:#0C0C0C;
+  --color-primary-2:#FFFFFF;
+  --color-accent:#F1B434;
+  --color-accent-hover:#F1C363;
+  --color-second-100:#161616;
+  --color-second-300:#292929;
+  --color-second-600:#646464;
+  --color-second-800:#C2C2C2;
+  --color-second-900:#F2F2F2;
+
+  /* --- Семантические роли --- */
+  --bg:var(--color-primary-2);
+  --bg-dark:var(--color-primary-1);
+  --surface:var(--color-second-900);
+  --surface-dark:var(--color-second-300);
+  --text:var(--color-primary-1);
+  --text-invert:var(--color-primary-2);
+  --text-muted:var(--color-second-600);
+  --text-muted-invert:var(--color-second-800);
+  --border:var(--color-second-900);
+  --border-invert:var(--color-second-800);
+  --focus-ring:var(--color-accent);
+
+  /* --- Шрифты --- */
+  --font-display:'Wadik','Onest',system-ui,sans-serif;
+  --font-body:'Onest',system-ui,-apple-system,'Segoe UI',sans-serif;
+
+  /* --- Типографическая шкала --- */
+  --fs-d1:44px;  --lh-d1:55px;     /* Wadik 700 — h1 / h2 секций */
+  --fs-d2:36px;  --lh-d2:45px;     /* Wadik 700 — h3 */
+  --fs-h3:36px;  --lh-h3:46.8px;   /* Onest 500 — крупный заголовок */
+  --fs-h4:24px;  --lh-h4:31.2px;   /* Onest 500 — подзаголовок */
+  --fs-base:16px;--lh-base:20.8px; /* Onest 400 — текст */
+  --fs-sm:14px;  --lh-sm:18.2px;
+  --fs-xs:12px;  --lh-xs:15.6px;
+
+  /* --- Сетка --- */
+  --container:1360px;       /* контентная колонка */
+  --container-wide:1440px;  /* шапка / подвал */
+  --gutter:40px;
+  --grid-gap:20px;
+  --col:325px;              /* 4 колонки: 325*4 + 20*3 = 1360 */
+  --col-2:670px;            /* 2 колонки: 670*2 + 20   = 1360 */
+
+  /* --- Ритм --- */
+  --sp-4:4px;   --sp-8:8px;   --sp-12:12px; --sp-16:16px;
+  --sp-20:20px; --sp-24:24px; --sp-32:32px; --sp-44:44px;
+  --sp-60:60px; --sp-72:72px; --sp-80:80px; --sp-100:100px;
+
+  --gap-title:var(--sp-20);   /* заголовок → описание */
+  --gap-block:var(--sp-44);   /* блок заголовка → контент */
+  --gap-section:var(--sp-72); /* между секциями */
+
+  /* --- Радиусы --- */
+  --shadow-card:0 1px 4px rgba(0,0,0,.12);
+
+  --r-4:4px; --r-8:8px; --r-12:12px; --r-20:20px; --r-32:32px; --r-pill:500px;
+
+  /* --- Слои --- */
+  --z-base:0; --z-sticky:100; --z-header:200; --z-overlay:1000;
+
+  --header-h:92px;
+}
+
+/* ==========================================================================
+   СБРОС
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+html{
+  -webkit-text-size-adjust:100%;
+  /* Гасим упругую прокрутку: за краями документа контента нет, и белая
+     зона там появляться не должна. */
+  overscroll-behavior-y:none;
+  /* За краями страницы видно только эту заливку — она белая. */
+  background:var(--bg);
+}
+body{
+  margin:0;
+  background:var(--bg);
+  overscroll-behavior-y:none;
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:var(--fs-base);
+  line-height:var(--lh-base);
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:clip;
+}
+h1,h2,h3,h4,h5,h6,p,figure,blockquote{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+img,svg,video{display:block;max-width:100%}
+img,video{height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+iframe{border:0}
+/* Раньше display у .btn/.stepper перебивал атрибут hidden, и кнопка со
+   счётчиком показывались одновременно. */
+[hidden]{display:none !important}
+
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--focus-ring);
+  outline-offset:2px;
+  border-radius:var(--r-4);
+}
+
+/* ==========================================================================
+   ТИПОГРАФИКА
+   ========================================================================== */
+.display-1,.display-2{
+  font-family:var(--font-display);
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+.display-1{font-size:var(--fs-d1);line-height:var(--lh-d1)}
+.display-2{font-size:var(--fs-d2);line-height:var(--lh-d2)}
+
+.title-lg{font-size:var(--fs-h3);line-height:var(--lh-h3);font-weight:500}
+.title-md{font-size:var(--fs-h4);line-height:var(--lh-h4);font-weight:500}
+.text-base{font-size:var(--fs-base);line-height:var(--lh-base)}
+.text-sm{font-size:var(--fs-sm);line-height:var(--lh-sm)}
+.text-xs{font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:300}
+
+.text-muted{color:var(--text-muted)}
+.text-invert{color:var(--text-invert)}
+.text-muted-invert{color:var(--text-muted-invert)}
+.text-medium{font-weight:500}
+.text-light{font-weight:300}
+
+/* Табличные цифры для цен и счётчиков — не «прыгают» при смене значения */
+.num{font-variant-numeric:tabular-nums}
+
+/* ==========================================================================
+   КОНТЕЙНЕРЫ И СЕТКА
+   ========================================================================== */
+.container{
+  width:100%;
+  max-width:var(--container);
+  margin-inline:auto;
+  padding-inline:var(--sp-20);
+}
+.container--wide{
+  max-width:var(--container-wide);
+  padding-inline:var(--gutter);
+}
+
+.section{padding-block:var(--gap-section)}
+.section--tight{padding-block:var(--sp-60)}
+.section--dark{background:var(--bg-dark);color:var(--text-invert)}
+
+/* Блок заголовка секции */
+.section-head{
+  display:flex;
+  flex-direction:column;
+  gap:var(--gap-title);
+  margin-bottom:var(--gap-block);
+}
+.section-head--center{align-items:center;text-align:center}
+.section-head__lead{max-width:440px}
+.section-head--center .section-head__lead{max-width:800px}
+
+/* Ряды по 4 и по 2 колонки */
+.grid{display:grid;gap:var(--grid-gap)}
+.grid--4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* ==========================================================================
+   УТИЛИТЫ
+   ========================================================================== */
+.visually-hidden{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+/* Прячем не отрицательным смещением, а обрезкой: при сдвиге body в зоне
+   рывка ссылка иначе выезжала бы наружу. */
+.skip-link{
+  position:absolute;left:var(--sp-20);top:var(--sp-12);z-index:var(--z-overlay);
+  padding:var(--sp-12) var(--sp-24);
+  background:var(--color-accent);color:var(--color-primary-1);
+  border-radius:var(--r-8);
+  clip-path:inset(50%);
+  opacity:0;
+  pointer-events:none;
+}
+.skip-link:focus{clip-path:none;opacity:1;pointer-events:auto}
+
+.stack{display:flex;flex-direction:column}
+.row{display:flex;align-items:center}
+.row--between{justify-content:space-between}
+.full-bleed{width:100vw;margin-inline:calc(50% - 50vw)}
+
+/* ==========================================================================
+   ОБВОДКА РАДИАЛЬНЫМ ГРАДИЕНТОМ
+   В макете рамки плиток с цифрами и карточек кейсов — не сплошная линия,
+   а Radial gradient C2C2C2 100% → C2C2C2 10%. Рисуем градиентный слой и
+   вырезаем середину маской; какие грани останутся — задаёт padding.
+   ========================================================================== */
+.gborder{position:relative}
+/* Регистрация нужна, чтобы браузер интерполировал переменные плавно,
+   а не переключал их скачком. */
+@property --gb-spread{syntax:"<percentage>";inherits:true;initial-value:100%}
+@property --gb-glow{syntax:"<number>";inherits:true;initial-value:0}
+@property --veil{syntax:"<number>";inherits:true;initial-value:0}
+
+.gborder{--gb-spread:100%;--gb-glow:0}
+.gborder::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  will-change:filter;
+  /* Луч расходится от центра к граням; свечение вспыхивает после отрисовки */
+  filter:drop-shadow(0 0 6px rgba(241,180,52,var(--gb-glow)));
+  background:radial-gradient(circle at 50% 50%,
+              rgba(194,194,194,1) 0%,
+              rgba(194,194,194,.1) var(--gb-spread));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+          mask-composite:exclude;
+}
+.gborder--tl::before{padding:1px 0 0 1px}
+.gborder--tr::before{padding:1px 1px 0 0}
+.gborder--bl::before{padding:0 0 1px 1px}
+.gborder--br::before{padding:0 1px 1px 0}
+.gborder--ltb::before{padding:1px 0 1px 1px}
+
+/* ==========================================================================
+   ПОДГОТОВКА К АНИМАЦИИ
+   Начальные состояния только при включённом JS: без него страница целая.
+   ========================================================================== */
+.js .site-header{opacity:0;transform:translateY(-16px)}
+.js .hero__title,
+.js .hero__card > *{opacity:0;transform:translateY(20px)}
+.js .js-reveal{opacity:0;transform:translateY(16px)}
+
+/* Скрипт не отработал или пользователь просил меньше движения — показываем всё */
+.anim-off .site-header,
+.anim-off .hero__title,
+.anim-off .hero__card > *,
+.anim-off .js-reveal{opacity:1 !important;transform:none !important}
+
+@media (prefers-reduced-motion:reduce){
+  .js .site-header,
+  .js .hero__title,
+  .js .hero__card > *,
+  .js .js-reveal{opacity:1;transform:none}
+}

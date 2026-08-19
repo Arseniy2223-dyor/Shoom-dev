@@ -1,0 +1,310 @@
+/* ==========================================================================
+   MOBILE — раскладка до 767px
+   Подключается последним, поэтому переопределяет десктопные правила
+   без повышения специфичности.
+   ========================================================================== */
+
+/* Кнопка меню и выдвижная панель существуют только на мобильном */
+.burger{display:none}
+.mobile-menu{display:none}
+
+@media (max-width:767px){
+
+  /* --- Токены --- */
+  :root{
+    --fs-d1:24px;  --lh-d1:30px;
+    --fs-d2:24px;  --lh-d2:30px;
+    --fs-h3:24px;  --lh-h3:31.2px;
+    --fs-h4:20px;  --lh-h4:26px;
+
+    --gutter:12px;
+    --grid-gap:12px;
+    --gap-section:44px;      /* отступ между блоками */
+    --gap-block:24px;
+    --gap-title:12px;
+
+    --header-h:52px;
+  }
+
+  .container,
+  .container--wide{padding-inline:12px}
+
+  /* --- Шапка --- */
+  .site-header{padding-block:8px}
+  .topbar{display:none}                 /* сервисная строка уезжает в меню */
+  .mainbar__nav{display:none}
+  .mainbar__actions{display:none}
+  .mainbar{gap:12px}
+  .mainbar__start{gap:12px}
+  .mainbar__end{max-width:none;flex:none;gap:12px}
+  .logo{padding:0}
+  .logo__full{display:none}
+  .logo{width:36px;height:36px;flex:none}
+  .logo .logo__mark{display:block;width:36px;height:36px}   /* перебиваем .logo img */
+
+  .burger{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:36px;height:36px;flex:none;
+  }
+  .burger img{width:36px;height:36px}
+
+  .mainbar__tools .icon{width:32px;height:32px}
+  .mainbar__tools .icon-link{width:32px;height:32px}
+  .cart__meta{font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:400}
+
+  .mobile-menu{
+    display:flex;flex-direction:column;justify-content:space-between;gap:24px;
+    padding:24px 12px;
+  }
+  .mobile-menu[hidden]{display:none}
+  .mobile-menu__list{display:flex;flex-direction:column}
+  .mobile-menu__link{
+    display:block;
+    padding-block:12px;
+    font-size:var(--fs-h4);line-height:var(--lh-h4);font-weight:500;
+    border-bottom:1px solid var(--border);
+  }
+  .mobile-menu__foot{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+  .mobile-menu__phone{font-size:var(--fs-h4);line-height:var(--lh-h4);font-weight:500}
+
+  /* --- Герой: карточкой, а не на весь экран --- */
+  .hero{
+    min-height:0;
+    padding-block:0;
+    color:var(--text);
+    isolation:auto;
+  }
+  .hero::after{display:none}
+  .hero__media{display:none}
+  .hero__inner{
+    gap:var(--gap-block);
+    max-width:none;
+    text-align:left;
+    align-items:stretch;
+  }
+  .hero__title{color:var(--text)}
+  .hero__lead{max-width:none;color:var(--text-invert)}
+  /* Тёмная карточка с фото, текстом и кнопкой */
+  .hero__card{
+    align-items:flex-start;
+    gap:12px;
+    padding:12px;
+    background:var(--bg-dark);
+    border-radius:var(--r-12);
+  }
+  .hero__poster{
+    display:block;
+    width:100%;height:186px;
+    object-fit:cover;
+    border-radius:var(--r-8);
+  }
+
+  /* --- Общие сетки --- */
+  .grid--4,
+  .grid--3,
+  .grid--2,
+  .results__videos,
+  .shop__row,
+  .reviews__grid,
+  .works__grid,
+  .faq__grid,
+  .contact__grid{grid-template-columns:minmax(0,1fr)}
+  .shop__row{display:grid}
+
+  .section-head{margin-bottom:var(--gap-block)}
+  .section-head__lead,
+  .section-head--center .section-head__lead{max-width:none}
+
+  /* --- Результаты --- */
+  .fact-card{
+    min-height:0;
+    gap:16px;
+    padding:12px;
+    background:var(--surface);
+    border:1px solid var(--text-muted);
+    border-radius:var(--r-8);
+  }
+  .fact-card__value{font-size:24px;line-height:30px}
+  .results__video{aspect-ratio:335/188}
+
+  /* --- Калькулятор ---
+     Логика конфигуратора на телефоне: снимок закреплён сверху, кнопка заказа
+     снизу, между ними прокручиваются настройки. Подсветка зон видна всегда. */
+  .calculator__grid{
+    display:block;
+    padding-inline:0;
+    gap:0;
+  }
+  .calculator__visual{
+    position:sticky;
+    top:var(--header-h);
+    z-index:2;
+    height:auto;
+    background:var(--bg);
+  }
+  /* Кадры листаются прокруткой с прилипанием — отдельный переключатель не нужен */
+  .carview-stage{
+    position:relative;
+    inset:auto;
+    display:flex;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    overscroll-behavior-x:contain;
+  }
+  .carview-stage::-webkit-scrollbar{display:none}
+  .carview{
+    /* снимок во всю ширину экрана; высота выводится из пропорции,
+       поэтому кузов не обрезается, а контур подсветки остаётся на месте */
+    flex:0 0 100%;
+    width:100%;
+    height:auto;
+    max-width:none;
+    scroll-snap-align:center;
+    /* на мобильном кадры стоят в ряд, а не стопкой */
+    grid-area:auto;
+    opacity:1;
+    translate:none;
+    visibility:visible;
+    transition:none;
+  }
+
+  .calculator__thumbs{display:none}
+  .carview-dots{
+    position:absolute;
+    left:50%;bottom:24px;
+    translate:-50% 0;
+    z-index:2;
+    display:flex;
+    gap:8px;
+  }
+  .carview-dots__item{
+    width:8px;height:8px;
+    border-radius:var(--r-pill);
+    background:var(--color-second-800);
+    transition:background-color .2s ease;
+  }
+  .carview-dots__item.is-active{background:var(--color-accent)}
+
+  .calculator__panel{
+    position:relative;
+    z-index:3;                       /* поверх залипшего фото */
+    margin-top:-12px;                /* наезжает на снимок */
+    padding-inline:12px;
+    padding-top:24px;
+    gap:24px;
+    background:var(--bg);
+    border-radius:var(--r-12) var(--r-12) 0 0;
+  }
+  .calculator__selects{grid-template-columns:minmax(0,1fr)}
+
+  /* Тариф: цена уходит под описание */
+  .tariff{min-height:0;gap:20px;padding:12px}
+  .tariff[aria-pressed="true"]{padding:11px}
+  .tariff__head{flex-direction:column;align-items:flex-start;gap:12px}
+  .tariff__price{text-align:left}
+
+  .zones{grid-template-columns:minmax(0,1fr)}
+  .zone{padding-right:var(--sp-32)}
+
+  .summary__row{flex-direction:column;gap:4px}
+  .summary__values{width:100%;justify-content:space-between;gap:12px}
+  .summary__qty,.summary__cost{width:auto;text-align:left}
+  .summary__cost{text-align:right}
+
+  .summary__order{
+    position:sticky;
+    bottom:0;
+    z-index:4;
+    margin-top:24px;
+    /* сплошная подложка, чтобы прокручиваемый список не просвечивал */
+    box-shadow:0 0 0 12px var(--bg);
+  }
+  .summary.is-empty .summary__order{margin-top:0}
+
+  /* --- Магазин --- */
+  .product-card{min-height:0}
+  .product-card__media{aspect-ratio:304/228}
+  .promo-card{min-height:380px;padding:12px}
+  .promo-card__body{max-width:none}
+  .promo-card__foot{align-items:flex-end}
+
+  /* --- О компании --- */
+  .about{min-height:0;padding-block:var(--gap-section)}
+  .about__inner{padding-block:0}
+  .about__backdrop{grid-template-rows:repeat(2,1fr)}
+  .about__track img{width:clamp(180px,52vw,240px)}
+  .about__lead{max-width:none}
+
+  /* --- Цифры: две колонки --- */
+  .stats__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat-cell{min-height:180px;padding:36px 12px 12px}
+  .stat-cell__index{top:12px;left:12px}
+  .stat-cell__value{font-size:24px;line-height:30px}
+  .stat-cell__label{font-size:var(--fs-sm);line-height:var(--lh-sm)}
+
+  /* --- Отзывы --- */
+  .rating-tile{padding:10px}
+  .rating-tile__value{font-size:28px;line-height:35px}
+  .review-card{padding:12px}
+
+  /* --- Работы: фото сверху --- */
+  .work-card{flex-direction:column;gap:24px;padding:12px}
+  .work-card__media{width:100%;height:auto;aspect-ratio:310/311}
+  .work-card__body{gap:24px}
+  .work-card .title-lg{font-size:28px;line-height:36.4px}
+  .work-card__foot{align-self:stretch}
+  .work-card__foot .btn{width:100%}
+  /* Декоративные грани на узком экране только снизу */
+  .work-card--br,.work-card--bl,.work-card--tr,.work-card--tl{
+    border-radius:0 0 var(--r-12) var(--r-12);
+  }
+
+  /* --- Вопросы --- */
+  .faq__aside{min-height:0;gap:24px}
+  .faq__lead{max-width:none}
+  .faq__contacts{width:100%}
+  .faq__messenger{width:auto;flex:1}
+  .accordion__row{gap:12px;padding-block:16px}
+  .accordion__index{display:none}
+  .accordion__question{font-size:18px;line-height:23.4px}
+  .accordion__toggle{width:32px;height:32px}
+  .accordion__answer{max-width:none}
+
+  /* --- Карта --- */
+  .map__frame{aspect-ratio:336/200}
+
+  /* --- Форма --- */
+  .contact__form-wrap{min-height:0;grid-template-columns:minmax(0,1fr);grid-template-rows:auto}
+  .contact__marquee--left,
+  .contact__marquee--right{display:none}   /* по бокам места нет */
+  .contact__marquee--top,
+  .contact__marquee--bottom{grid-column:1}
+  .contact__form{grid-column:1;grid-row:auto;padding:44px 12px}
+  .contact__form-row{flex-direction:column;align-items:stretch}
+  .contact__form-mark{width:270px;height:270px}
+  .contact__promo{min-height:332px}
+
+  /* --- Подвал --- */
+  .site-footer__main{flex-direction:column;gap:32px;padding-inline:12px}
+  .site-footer__brand{max-width:none}
+  .site-footer__cols{flex-direction:column;gap:32px}
+  .site-footer__col--nav,
+  .site-footer__col--shop,
+  .site-footer__col--contacts{max-width:none}
+  .site-footer__col--contacts{gap:24px}
+  .site-footer__legal{
+    flex-direction:column;align-items:flex-start;gap:12px;
+    padding-inline:12px;
+  }
+  .site-footer__legal-links{flex-direction:column;align-items:flex-start;gap:8px}
+  .site-footer__credits{width:auto}
+}
+
+/* Совсем узкие экраны */
+@media (max-width:359px){
+  :root{--fs-d1:28px; --lh-d1:35px}
+  .faq__messengers{flex-direction:column}
+  .faq__messenger{width:100%}
+}
